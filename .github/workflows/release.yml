@@ -52,5 +52,6 @@ jobs:
           gh release create "$RELEASE_TAG" dist/*.zip \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
+            --latest \
             --title "$RELEASE_TITLE" \
             --notes "Automated release for commit $GITHUB_SHA."
