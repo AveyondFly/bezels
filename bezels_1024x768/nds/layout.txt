@@ -1,0 +1,41 @@
+{
+    "bg":"bg_vertical.png",
+
+    "screen0_x":256,
+    "screen0_y":0,
+    "screen0_w":512,
+    "screen0_h":384,
+
+    "screen1_x":256,
+    "screen1_y":384,
+    "screen1_w":512,
+    "screen1_h":384
+},
+
+{
+    "bg":"bg_vertical_2ds.png",
+
+    "screen0_x":0,
+    "screen0_y":0,
+    "screen0_w":768,
+    "screen0_h":576,
+
+    "screen1_x":768,
+    "screen1_y":576,
+    "screen1_w":256,
+    "screen1_h":192
+},
+
+{
+    "bg":"bg_vertical_full.png",
+
+    "screen0_x":128,
+    "screen0_y":0,
+    "screen0_w":768,
+    "screen0_h":576,
+
+    "screen1_x":384,
+    "screen1_y":576,
+    "screen1_w":256,
+    "screen1_h":192
+},
