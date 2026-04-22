@@ -1,0 +1,56 @@
+name: Build And Release Bezels
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build release metadata
+        shell: bash
+        run: |
+          short_sha="${GITHUB_SHA::7}"
+          tag="release-${{ github.run_number }}-${short_sha}"
+          title="Bezels ${tag}"
+
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+          echo "RELEASE_TITLE=$title" >> "$GITHUB_ENV"
+
+      - name: Package bezel directories
+        shell: bash
+        run: |
+          shopt -s nullglob
+          mkdir -p dist
+
+          for dir in bezels_*; do
+            if [[ -d "$dir" ]]; then
+              zip -qr "dist/${dir}.zip" "$dir"
+            fi
+          done
+
+          if ! compgen -G "dist/*.zip" > /dev/null; then
+            echo "No bezels_* directories were found."
+            exit 1
+          fi
+
+      - name: Create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release create "$RELEASE_TAG" dist/*.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$RELEASE_TITLE" \
+            --notes "Automated release for commit $GITHUB_SHA."
