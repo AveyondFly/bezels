@@ -30,12 +30,22 @@ jobs:
       - name: Package bezel directories
         shell: bash
         run: |
-          shopt -s nullglob
+          shopt -s nullglob dotglob
           mkdir -p dist
 
           for dir in bezels_*; do
             if [[ -d "$dir" ]]; then
-              zip -qr "dist/${dir}.zip" "$dir"
+              (
+                cd "$dir"
+                items=(*)
+
+                if [[ ${#items[@]} -eq 0 ]]; then
+                  echo "Skipping empty directory: $dir"
+                  exit 0
+                fi
+
+                zip -qr "../dist/${dir}.zip" -- "${items[@]}"
+              )
             fi
           done
 
